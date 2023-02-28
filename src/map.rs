@@ -47,17 +47,38 @@ impl Map {
         }
     }
 
-    pub fn render(&self, ctx: &mut BTerm) {
-        for x in 0..WINDOW_WIDTH {
-            for y in 0..WINDOW_HEIGHT {
-                let idx = self.tile_idx(Point {
-                    x: x as i32,
-                    y: y as i32,
-                });
-                match self.tiles[idx] {
-                    TileType::Floor => ctx.set(x, y, BLUE, BLACK, to_cp437('.')),
-                    TileType::Hall => ctx.set(x, y, RED, BLACK, to_cp437('.')),
-                    TileType::Wall => ctx.set(x, y, SKYBLUE, BLACK, to_cp437('#')),
+    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
+        ctx.set_active_console(0);
+
+        for x in camera.left_x..camera.right_x {
+            for y in camera.top_y..camera.bottom_y {
+                let tile = Point::new(x, y);
+                if self.in_bounds(tile) {
+                    let idx = self.tile_idx(tile);
+
+                    match self.tiles[idx] {
+                        TileType::Floor => ctx.set(
+                            x - camera.left_x,
+                            y - camera.top_y,
+                            WHITE,
+                            BLACK,
+                            to_cp437('.'),
+                        ),
+                        TileType::Hall => ctx.set(
+                            x - camera.left_x,
+                            y - camera.top_y,
+                            WHITE,
+                            BLACK,
+                            to_cp437('.'),
+                        ),
+                        TileType::Wall => ctx.set(
+                            x - camera.left_x,
+                            y - camera.top_y,
+                            WHITE,
+                            BLACK,
+                            to_cp437('#'),
+                        ),
+                    }
                 }
             }
         }
