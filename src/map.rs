@@ -30,11 +30,7 @@ impl Map {
 
     pub fn is_walkable(&self, p: Point) -> bool {
         if let Some(idx) = self.try_point(p) {
-            return match self.tiles[idx] {
-                TileType::Floor => true,
-                TileType::Hall => true,
-                _ => false,
-            };
+            return matches!(self.tiles[idx], TileType::Floor | TileType::Hall);
         };
         false
     }
@@ -44,43 +40,6 @@ impl Map {
             Some(self.tile_idx(p))
         } else {
             None
-        }
-    }
-
-    pub fn render(&self, ctx: &mut BTerm, camera: &Camera) {
-        ctx.set_active_console(0);
-
-        for x in camera.left_x..camera.right_x {
-            for y in camera.top_y..camera.bottom_y {
-                let tile = Point::new(x, y);
-                if self.in_bounds(tile) {
-                    let idx = self.tile_idx(tile);
-
-                    match self.tiles[idx] {
-                        TileType::Floor => ctx.set(
-                            x - camera.left_x,
-                            y - camera.top_y,
-                            WHITE,
-                            BLACK,
-                            to_cp437('.'),
-                        ),
-                        TileType::Hall => ctx.set(
-                            x - camera.left_x,
-                            y - camera.top_y,
-                            WHITE,
-                            BLACK,
-                            to_cp437('.'),
-                        ),
-                        TileType::Wall => ctx.set(
-                            x - camera.left_x,
-                            y - camera.top_y,
-                            WHITE,
-                            BLACK,
-                            to_cp437('#'),
-                        ),
-                    }
-                }
-            }
         }
     }
 }
