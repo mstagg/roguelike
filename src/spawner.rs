@@ -15,6 +15,7 @@ pub fn spawn_monster(ecs: &mut World, spawn_point: Point) {
     let mut rng = RandomNumberGenerator::new();
     ecs.push((
         Enemy,
+        MovesRandomly,
         Point::new(spawn_point.x, spawn_point.y),
         Render {
             color: ColorPair::new(WHITE, BLACK),

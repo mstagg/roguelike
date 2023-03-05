@@ -6,5 +6,6 @@ pub struct Render {
 }
 
 pub struct Player;
-
 pub struct Enemy;
+
+pub struct MovesRandomly;

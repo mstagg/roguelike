@@ -8,6 +8,7 @@ pub fn player_input(
     #[resource] map: &Map,
     #[resource] key: &Option<VirtualKeyCode>,
     #[resource] camera: &mut Camera,
+    #[resource] current_state: &mut TurnState,
 ) {
     if let Some(key) = key {
         let delta = match key {
@@ -25,6 +26,7 @@ pub fn player_input(
                 let destination = *pos + delta;
                 if map.is_walkable(destination) {
                     *pos = destination;
+                    *current_state = TurnState::PlayerTurn;
                     camera.move_to_point(destination);
                 }
             });
